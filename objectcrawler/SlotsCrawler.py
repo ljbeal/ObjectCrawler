@@ -22,7 +22,7 @@ def get_assignment(obj) -> str:
     return locations[-1]
 
 
-class crawl_slots:
+class SlotsCrawler:
     """
     Takes an object `obj`, and attempts to recursively crawl the __slots__
     """
