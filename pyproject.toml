@@ -1,5 +1,5 @@
 [project]
-name = "ObjectCrawler"
+name = "objectcrawler"
 authors = [
     {name = "Louis Beal", email = "louis.j.beal@gmail.com"}
 ]
