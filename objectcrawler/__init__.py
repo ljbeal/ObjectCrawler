@@ -1,4 +1,4 @@
-from SlotsCrawler import SlotsCrawler
+from objectcrawler.SlotsCrawler import SlotsCrawler
 
 __all__ = ["SlotsCrawler"]
 
