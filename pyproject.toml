@@ -10,8 +10,11 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Operating System :: OS Independent",
 ]
-version = "0.0.1"
+dynamic = ["version"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = 'objectcrawler.__version__'}
