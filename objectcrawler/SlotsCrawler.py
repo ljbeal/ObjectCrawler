@@ -13,23 +13,10 @@ class SlotsCrawler:
         self.obj = obj
         self.indent = 0
         self.continuation = {0: True}
-
-        assignment = get_assignment(obj)
-
-        try:
-            value = str(obj)
-        except Exception as E:
-            value = f"{type(E)}: {str(E)}"
-
-        self.data = {
-            "item": [assignment],
-            "value": [value],
-            "class": [obj.__class__.__name__],
-            "source": [obj.__class__.__name__],
-        }
+        self.data = {}
 
     def __str__(self):
-        self._crawl(self.obj)
+        self._crawl(self.obj, initialise=True)
 
         header = []
         spacer = []
@@ -62,7 +49,28 @@ class SlotsCrawler:
 
         return "\n".join(output)
 
-    def _crawl(self, obj, indent=0):
+    def _initialise_crawl(self, obj):
+        self.indent = 0
+        self.continuation = {0: True}
+
+        assignment = get_assignment(obj)
+
+        try:
+            value = str(obj)
+        except Exception as E:
+            value = f"{type(E)}: {str(E)}"
+
+        self.data = {
+            "item": [assignment],
+            "value": [value],
+            "class": [obj.__class__.__name__],
+            "source": [obj.__class__.__name__],
+        }
+
+    def _crawl(self, obj, indent=0, initialise=True):
+        if initialise:
+            self._initialise_crawl(obj)
+
         self.continuation[indent] = True
         for o in obj.__class__.__mro__:
             if not hasattr(o, "__slots__"):
@@ -99,7 +107,7 @@ class SlotsCrawler:
                 self.data["value"].append(str(val))
 
                 if hasattr(val, "__slots__"):
-                    self._crawl(val, indent + 1)
+                    self._crawl(val, indent + 1, initialise=False)
 
     @property
     def str(self) -> str:
