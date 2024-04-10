@@ -9,6 +9,8 @@ class SlotsCrawler:
     Takes an object `obj`, and attempts to recursively crawl the __slots__
     """
 
+    __slots__ = ["obj", "indent", "continuation", "data"]
+
     def __init__(self, obj):
         self.obj = obj
         self.indent = 0
