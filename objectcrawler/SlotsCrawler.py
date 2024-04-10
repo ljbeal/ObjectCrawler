@@ -82,7 +82,7 @@ class SlotsCrawler:
                 indentstr = []
                 for i in range(indent):
                     if self.continuation[i]:
-                        indentstr.append("|  ")
+                        indentstr.append("│  ")
                     else:
                         indentstr.append("   ")
                 indentstr = "".join(indentstr)
