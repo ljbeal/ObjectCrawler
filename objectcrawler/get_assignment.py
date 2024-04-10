@@ -16,4 +16,6 @@ def get_assignment(obj) -> str:
             for k, v in item.items():
                 if v is obj:
                     locations.append(k)
-    return locations[-1]
+    if len(locations) == 0:
+        return "~"
+    return locations[0]
