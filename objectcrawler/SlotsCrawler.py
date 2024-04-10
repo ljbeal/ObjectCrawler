@@ -32,9 +32,16 @@ class SlotsCrawler:
         self.indent = 0
         self.continuation = {0: True}
 
+        assignment = get_assignment(obj)
+
+        try:
+            value = str(obj)
+        except Exception as E:
+            value = f"{type(E)}: {str(E)}"
+
         self.data = {
-            "item": [get_assignment(obj)],
-            "value": [str(obj)],
+            "item": [assignment],
+            "value": [value],
             "class": [obj.__class__.__name__],
             "source": [obj.__class__.__name__],
         }
