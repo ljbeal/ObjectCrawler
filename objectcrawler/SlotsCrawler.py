@@ -28,10 +28,11 @@ class SlotsCrawler:
             ljust_sizes.append(maxlen)
 
             header.append(key.ljust(maxlen))
-            spacer.append("-" * maxlen)
+            spacer.append("─" * maxlen)
 
-        spacer = "-+-".join(spacer)
-        header = " | ".join(header)
+        uspacer = "─┬─".join(spacer)
+        spacer = "─┼─".join(spacer)
+        header = " │ ".join(header)
 
         zipped = []
         for idx in range(len(self.data[key])):
@@ -41,13 +42,13 @@ class SlotsCrawler:
 
             zipped.append(tmp)
 
-        output = [spacer, header, spacer]
+        output = [uspacer, header, spacer]
         for line in zipped:
             tmp = []
             for idx, item in enumerate(line):
                 tmp.append(str(item).ljust(ljust_sizes[idx]))
 
-            output.append(" | ".join(tmp))
+            output.append(" │ ".join(tmp))
 
         return "\n".join(output)
 
