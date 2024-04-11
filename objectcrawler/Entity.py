@@ -2,6 +2,19 @@ from objectcrawler.get_assignment import get_assignment
 
 
 class Entity:
+    """
+    Class to store a single entity of the queried class
+
+    Args:
+        obj:
+            actual object
+        assignment:
+            explicitly set the assigned parameter for this object. Attempts to extract it using gc if not set
+        source:
+            class where this object is stored, not necessarily the parent
+        parent:
+            actual parent class where this entity was found
+    """
 
     __slots__ = ["assignment", "parent", "classname", "value"]
 
