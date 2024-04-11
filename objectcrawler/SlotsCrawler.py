@@ -101,7 +101,7 @@ class SlotsCrawler:
 
             for idx, item in enumerate(slots):
                 tmp = getattr(obj, item)
-                self.data.append(Entity(tmp, assignment=item, source=source))
+                self.data.append(Entity(tmp, assignment=item, source=source, parent=objEntity))
 
                 if hasattr(tmp, "__slots__"):
                     self._crawl(tmp, initialise=False)
