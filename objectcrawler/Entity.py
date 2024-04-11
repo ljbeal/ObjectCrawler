@@ -1,3 +1,5 @@
+from typing import Union
+
 from objectcrawler.get_assignment import get_assignment
 
 
@@ -16,10 +18,11 @@ class Entity:
             actual parent class where this entity was found
     """
 
-    __slots__ = ["assignment", "parent", "classname", "value"]
+    __slots__ = ["assignment", "source", "classname", "value", "parent"]
 
-    def __init__(self, obj, assignment = None, parent = ""):
+    def __init__(self, obj, assignment=None, source="self", parent: Union[None, "Entity"] = None):
         self.assignment = assignment or get_assignment(obj)
+        self.source = source
         self.parent = parent
 
         self.classname = obj.__class__.__name__
@@ -32,4 +35,7 @@ class Entity:
         return (" " * indent + self.assignment.ljust(widths[0]) +
                 " | " + self.value.ljust(widths[1]) +
                 " | " + self.classname.ljust(widths[2]) +
-                " | " + self.parent.ljust(widths[3]))
+                " | " + self.source.ljust(widths[3]))
+
+    def __repr__(self):
+        return f"Entity @ {self.assignment}"

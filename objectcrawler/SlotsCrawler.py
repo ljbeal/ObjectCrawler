@@ -30,14 +30,14 @@ class SlotsCrawler:
         widths = {"assignment": 10,
                   "value": 5,
                   "classname": 9,
-                  "parent": 6}
+                  "source": 6}
         extra = 2  # extra whitespace
         # cache a list of lines, for later treating dependent on col widths
         cache = []
         indents = {}
         for item in self.data:
             if item.classname not in indents:
-                indent = indents.get(item.parent, None)
+                indent = indents.get(item.source, None)
 
                 if indent is None:
                     indent = 0
@@ -103,7 +103,7 @@ class SlotsCrawler:
 
             for idx, item in enumerate(slots):
                 tmp = getattr(obj, item)
-                self.data.append(Entity(tmp, assignment=item, parent=source))
+                self.data.append(Entity(tmp, assignment=item, source=source))
 
                 if hasattr(tmp, "__slots__"):
                     self._crawl(tmp, initialise=False)
