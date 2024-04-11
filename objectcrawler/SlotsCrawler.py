@@ -30,7 +30,8 @@ class SlotsCrawler:
         widths = {"assignment": 10,
                   "value": 5,
                   "classname": 9,
-                  "source": 6}
+                  "source": 6,
+                  "parent": 6}
         extra = 2  # extra whitespace
         # cache a list of lines, for later treating dependent on col widths
         cache = []
