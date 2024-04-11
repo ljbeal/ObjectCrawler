@@ -17,6 +17,10 @@ class SlotsCrawler:
         self.data = []
 
     def __str__(self):
+        return self.tree()
+
+    def tree(self):
+
         self._crawl(self.obj, initialise=True)
 
         chars = {"pass": "│",
