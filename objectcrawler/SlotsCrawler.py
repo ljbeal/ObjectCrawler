@@ -51,10 +51,9 @@ class SlotsCrawler:
 
             line = []
             for k in widths:
+                val = str(getattr(item, k))
                 if k == "assignment":
-                    val = "  " * indent + getattr(item, k)
-                else:
-                    val = getattr(item, k)
+                    val = "  " * indent + val
                 line.append(val)
                 # update the lengths if necessary
                 if len(val) > widths[k]:
