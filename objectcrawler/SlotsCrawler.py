@@ -2,7 +2,6 @@
 Module holding main crawler for __slots__ based objects
 """
 from objectcrawler.Entity import Entity
-from objectcrawler.get_assignment import get_assignment
 
 
 class SlotsCrawler:
