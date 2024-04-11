@@ -1,6 +1,7 @@
 """
 Module holding main crawler for __slots__ based objects
 """
+from objectcrawler.Entity import Entity
 from objectcrawler.get_assignment import get_assignment
 
 
@@ -13,68 +14,63 @@ class SlotsCrawler:
 
     def __init__(self, obj):
         self.obj = obj
-        self.indent = 0
-        self.continuation = {0: True}
-        self.data = {}
+        self.data = []
 
     def __str__(self):
         self._crawl(self.obj, initialise=True)
 
+        chars = {"pass": "│",
+                 "branch": "├",
+                 "end": "└"}
+        # calculate column widths
+        widths = {"assignment": 10,
+                  "value": 5,
+                  "classname": 9,
+                  "parent": 6}
+        extra = 2
+        # cache a list of lines, for later treating dependent on col widths
+        cache = []
+        for item in self.data:
+            line = []
+            for k in widths:
+                val = getattr(item, k)
+                line.append(val)
+                # update the lengths if necessary
+                if len(val) > widths[k]:
+                    widths[k] = len(val)
+            # add this line
+            cache.append(line)
+        # generate the true output
+        # start with the header
         header = []
         spacer = []
-        ljust_sizes = []
-        for key, vals in self.data.items():
-            maxlen = max(max([len(i) for i in vals]), len(key)) + 2
-            ljust_sizes.append(maxlen)
+        for col, width in widths.items():
+            header.append(col.ljust(width + extra))
+            spacer.append("─" * (width + extra))
+        uspacer = "┬─".join(spacer)
+        spacer = "┼─".join(spacer)
+        header = "│ ".join(header)
 
-            header.append(key.ljust(maxlen))
-            spacer.append("─" * maxlen)
-
-        uspacer = "─┬─".join(spacer)
-        spacer = "─┼─".join(spacer)
-        header = " │ ".join(header)
-
-        zipped = []
-        for idx in range(len(self.data[key])):
-            tmp = []
-            for key, vals in self.data.items():
-                tmp.append(vals[idx])
-
-            zipped.append(tmp)
-
+        # now generate table
         output = [uspacer, header, spacer]
-        for line in zipped:
+        for line in cache:
             tmp = []
             for idx, item in enumerate(line):
-                tmp.append(str(item).ljust(ljust_sizes[idx]))
+                width = list(widths.values())[idx]
 
-            output.append(" │ ".join(tmp))
+                tmp.append(item.ljust(width + extra))
+
+            output.append("│ ".join(tmp))
 
         return "\n".join(output)
 
     def _initialise_crawl(self, obj):
-        self.indent = 0
-        self.continuation = {0: True}
+        self.data.append(Entity(obj))
 
-        assignment = get_assignment(obj)
-
-        try:
-            value = str(obj)
-        except Exception as E:
-            value = f"{type(E)}: {str(E)}"
-
-        self.data = {
-            "item": [assignment],
-            "value": [value],
-            "class": [obj.__class__.__name__],
-            "source": [obj.__class__.__name__],
-        }
-
-    def _crawl(self, obj, indent=0, initialise=True):
+    def _crawl(self, obj, initialise=True):
         if initialise:
             self._initialise_crawl(obj)
 
-        self.continuation[indent] = True
         for o in obj.__class__.__mro__:
             if not hasattr(o, "__slots__"):
                 continue
@@ -83,34 +79,11 @@ class SlotsCrawler:
             slots = o.__slots__
 
             for idx, item in enumerate(slots):
-                last = (idx == len(slots) - 1)
+                tmp = getattr(obj, item)
+                self.data.append(Entity(tmp, assignment=item, parent=source))
 
-                sub_indent = "├─ "
-                if last:
-                    sub_indent = "└─ "
-                    self.continuation[indent] = False
-
-                indentstr = []
-                for i in range(indent):
-                    if self.continuation[i]:
-                        indentstr.append("│  ")
-                    else:
-                        indentstr.append("   ")
-                indentstr = "".join(indentstr)
-
-                try:
-                    val = getattr(obj, item)
-                except AttributeError:
-                    val = "AttributeError"
-
-                classname = val.__class__.__name__
-                self.data["source"].append(" " * indent + source)
-                self.data["class"].append(classname)
-                self.data["item"].append(indentstr + sub_indent + item)
-                self.data["value"].append(str(val))
-
-                if hasattr(val, "__slots__"):
-                    self._crawl(val, indent + 1, initialise=False)
+                if hasattr(tmp, "__slots__"):
+                    self._crawl(tmp, initialise=False)
 
     @property
     def str(self) -> str:
