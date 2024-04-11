@@ -26,24 +26,42 @@ class SlotsCrawler:
         chars = {"pass": "│",
                  "branch": "├",
                  "end": "└"}
-        # calculate column widths
+        # calculate column widths, pre-fill with title lengths
         widths = {"assignment": 10,
                   "value": 5,
                   "classname": 9,
                   "parent": 6}
-        extra = 2
+        extra = 2  # extra whitespace
         # cache a list of lines, for later treating dependent on col widths
         cache = []
+        indents = {}
         for item in self.data:
+            if item.classname not in indents:
+                indent = indents.get(item.parent, None)
+
+                if indent is None:
+                    indent = 0
+                else:
+                    indent += 1
+
+                indents[item.classname] = indent
+
+            # generate the indent level from the name cache
+            indent = indents[item.classname]
+
             line = []
             for k in widths:
-                val = getattr(item, k)
+                if k == "assignment":
+                    val = "  " * indent + getattr(item, k)
+                else:
+                    val = getattr(item, k)
                 line.append(val)
                 # update the lengths if necessary
                 if len(val) > widths[k]:
                     widths[k] = len(val)
             # add this line
             cache.append(line)
+
         # generate the true output
         # start with the header
         header = []
@@ -65,6 +83,8 @@ class SlotsCrawler:
                 tmp.append(item.ljust(width + extra))
 
             output.append("│ ".join(tmp))
+
+        print(indents)
 
         return "\n".join(output)
 
