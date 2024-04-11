@@ -29,7 +29,7 @@ class Entity:
         self.value = str(obj)
 
     def __repr__(self):
-        return f"Entity @ {self.assignment}"
+        return f"Entity {self.classname} @ {self.assignment}"
 
     def __hash__(self):
         return hash(self.assignment + self.value)
