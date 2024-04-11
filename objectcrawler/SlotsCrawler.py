@@ -87,12 +87,10 @@ class SlotsCrawler:
 
         return "\n".join(output)
 
-    def _initialise_crawl(self, obj):
-        self.data.append(Entity(obj))
-
     def _crawl(self, obj, initialise=True):
+        objEntity = Entity(obj)
         if initialise:
-            self._initialise_crawl(obj)
+            self.data.append(objEntity)
 
         for o in obj.__class__.__mro__:
             if not hasattr(o, "__slots__"):
