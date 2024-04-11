@@ -1,7 +1,12 @@
 """
 Module holding main crawler for __slots__ based objects
 """
+import logging
+
 from objectcrawler.Entity import Entity
+
+
+logger = logging.getLogger(__name__)
 
 
 class SlotsCrawler:
@@ -19,7 +24,7 @@ class SlotsCrawler:
         return self.tree()
 
     def tree(self):
-
+        logger.info("generating tree")
         self._crawl(self.obj, initialise=True)
 
         chars = {"pass": "│",
@@ -36,6 +41,8 @@ class SlotsCrawler:
         cache = []
         indents = {}
         for item in self.data:
+            logger.debug(f"\ttreating item {item}")
+            logger.debug(f"\tparent is {item.parent}")
             if item.classname not in indents:
                 indent = indents.get(item.source, None)
 
@@ -48,6 +55,7 @@ class SlotsCrawler:
 
             # generate the indent level from the name cache
             indent = indents[item.classname]
+            logging.debug(f"\tindent level set to {indent}")
 
             line = []
             for k in widths:
