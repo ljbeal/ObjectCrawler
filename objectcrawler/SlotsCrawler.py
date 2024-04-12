@@ -2,6 +2,7 @@
 Module holding main crawler for __slots__ based objects
 """
 import logging
+from typing import Union
 
 from objectcrawler.Entity import Entity
 
@@ -25,7 +26,17 @@ class SlotsCrawler:
     def __str__(self):
         return self.tree()
 
+    def __sub__(self, other):
+        diff = []
+        for item in self.data:
+            if item not in other.data:
+                item.diff = True
+            diff.append(item)
+
+        return self.tree(diff)
+
     def tree(self,
+             data: Union[None, list] = None,
              debug: bool = False,
              whitespace: int = 2,
              branch_len: int = 1) -> str:
@@ -33,6 +44,8 @@ class SlotsCrawler:
         Analyse the stored object
 
         Args:
+            data:
+                explicitly set data list (for differences)
             debug:
                 prints extra debug info if True
             whitespace:
@@ -41,7 +54,11 @@ class SlotsCrawler:
                 Sets length of "branch" horizontal lines
         """
         logger.info("generating tree")
-        self._crawl(self.obj, initialise=True)
+        if data is None:
+            logger.debug("no data provided, generating tree")
+            self._crawl(self.obj, initialise=True)
+
+            data = self.data
 
         # calculate column widths, pre-fill with title lengths
         widths = {"assignment": 10,
@@ -55,7 +72,7 @@ class SlotsCrawler:
         cache = []
         indents = {}
         indents_used = {}
-        for item in self.data:
+        for item in data:
             logger.debug(f"treating item {item}")
             logger.debug(f"\tparent is {item.parent}")
             if item.parent not in indents:
@@ -95,7 +112,10 @@ class SlotsCrawler:
                 if k == "assignment":
                     val = indentstr + val
 
-                line.append(val)
+                if item.diff:
+                    line.append(f"\x1b[31m{val}\x1b[0m")
+                else:
+                    line.append(val)
                 # update the lengths if necessary
                 if len(val) > widths[k]:
                     widths[k] = len(val)
@@ -119,8 +139,11 @@ class SlotsCrawler:
             tmp = []
             for idx, item in enumerate(line):
                 width = list(widths.values())[idx]
-
-                tmp.append(item.ljust(width + whitespace))
+                ljust = width + whitespace
+                # need to adjust for colouration, if present
+                if "\x1b[31m" in item:
+                    ljust += 9
+                tmp.append(item.ljust(ljust))
 
             output.append("│ ".join(tmp))
 

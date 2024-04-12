@@ -21,7 +21,7 @@ class Entity:
             actual parent class where this entity was found
     """
 
-    __slots__ = ["assignment", "source", "classname", "value", "value_is_explicit", "parent", "nchildren"]
+    __slots__ = ["assignment", "source", "classname", "value", "value_is_explicit", "parent", "nchildren", "diff"]
 
     def __init__(self, obj, assignment=None, source="self", parent: Union[None, "Entity"] = None):
         logger.debug(f"Creating Entity for object {obj} "
@@ -38,6 +38,8 @@ class Entity:
 
         self.nchildren = 0
         self.parent = parent
+
+        self.diff = False
 
     def __repr__(self) -> str:
         uid = str(hash(self))[-8:]
