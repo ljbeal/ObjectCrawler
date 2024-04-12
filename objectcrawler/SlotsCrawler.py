@@ -35,31 +35,32 @@ class SlotsCrawler:
                   "value": 5,
                   "classname": 9,
                   "source": 6,
+                  "entity": 6,
                   "parent": 6}
         extra = 2  # extra whitespace
         # cache a list of lines, for later treating dependent on col widths
         cache = []
         indents = {}
         for item in self.data:
-            logger.debug(f"\ttreating item {item}")
+            logger.debug(f"treating item {item}")
             logger.debug(f"\tparent is {item.parent}")
-            if item.classname not in indents:
-                indent = indents.get(item.source, None)
+            if item.parent not in indents:
+                indent = 0
+                logger.debug(f"\t\tparent {item.parent} not in indents, setting to O")
+            else:
+                indent = indents[item.parent] + 1
+                logger.debug(f"\t\tfound parent {item.parent} at indent {indent - 1}")
 
-                if indent is None:
-                    indent = 0
-                else:
-                    indent += 1
-
-                indents[item.classname] = indent
-
-            # generate the indent level from the name cache
-            indent = indents[item.classname]
+            indents[item] = indent
             logging.debug(f"\tindent level set to {indent}")
 
             line = []
             for k in widths:
-                val = str(getattr(item, k))
+                if k == "entity":
+                    val = str(item)
+                else:
+                    val = str(getattr(item, k))
+
                 if k == "assignment":
                     val = "  " * indent + val
                 line.append(val)
