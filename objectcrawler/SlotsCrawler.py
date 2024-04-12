@@ -96,8 +96,8 @@ class SlotsCrawler:
 
         return "\n".join(output)
 
-    def _crawl(self, obj, initialise=True):
-        objEntity = Entity(obj)
+    def _crawl(self, obj, assignment=None, initialise=True):
+        objEntity = Entity(obj, assignment=assignment)
         if initialise:
             self.data.append(objEntity)
 
@@ -116,7 +116,7 @@ class SlotsCrawler:
                 self.data.append(Entity(tmp, assignment=item, source=source, parent=objEntity))
 
                 if hasattr(tmp, "__slots__"):
-                    self._crawl(tmp, initialise=False)
+                    self._crawl(tmp, assignment=item, initialise=False)
 
     @property
     def str(self) -> str:
