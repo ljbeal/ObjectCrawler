@@ -33,7 +33,11 @@ class Entity:
         "iterable",
         ]
 
-    def __init__(self, obj, assignment=None, source="self", parent: Union[None, "Entity"] = None):
+    def __init__(self, obj,
+                 assignment: Union[None, str] = None,
+                 source: str = "self",
+                 parent: Union[None, "Entity"] = None):
+
         logger.debug(f"Creating Entity for object {obj} "
                      f"with assignment: {assignment}, source: {source}, parent: {parent}")
         self.assignment = assignment or get_assignment(obj)
