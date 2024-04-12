@@ -204,6 +204,14 @@ class Crawler:
 
             members = getattr(o, "__slots__", [])
 
+            if hasattr(obj, "__dict__"):
+                for item in obj.__dict__:
+                    if not item.startswith("__"):
+                        logger.debug(f"\tadding {item}")
+                        members.append(item)
+                    else:
+                        logger.debug(f"\tskipped {item}")
+
             if len(members) == 0:
                 continue
 
