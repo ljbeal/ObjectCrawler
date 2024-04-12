@@ -1,8 +1,8 @@
 import logging
 
-from objectcrawler.Crawler import SlotsCrawler
+from objectcrawler.Crawler import Crawler
 
-__all__ = ["SlotsCrawler"]
+__all__ = ["Crawler"]
 
 __version__ = "0.0.1"
 

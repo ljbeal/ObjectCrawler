@@ -10,7 +10,7 @@ from objectcrawler.Entity import Entity
 logger = logging.getLogger(__name__)
 
 
-class SlotsCrawler:
+class Crawler:
     """
     Takes an object `obj`, and attempts to recursively crawl the __slots__
     """
