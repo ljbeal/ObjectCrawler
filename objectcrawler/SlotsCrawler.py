@@ -23,7 +23,16 @@ class SlotsCrawler:
     def __str__(self):
         return self.tree()
 
-    def tree(self, debug=False):
+    def tree(self, debug: bool = False, whitespace: int = 2) -> str:
+        """
+        Analyse the stored object
+
+        Args:
+            debug:
+                prints extra debug info if True
+            whitespace:
+                Sets level of whitespace at the end of each column
+        """
         logger.info("generating tree")
         self._crawl(self.obj, initialise=True)
 
@@ -35,7 +44,6 @@ class SlotsCrawler:
         if debug:
             widths.update({"entity": 6, "parent": 6, "nchildren": 8})
 
-        extra = 2  # extra whitespace
         # cache a list of lines, for later treating dependent on col widths
         cache = []
         indents = {}
@@ -56,7 +64,7 @@ class SlotsCrawler:
             if indent == 0:
                 indentstr = ""
             else:
-                indentstr =  "│ " * (indent - 1)
+                indentstr =  "│  " * (indent - 1)
                 try:
                     indents_used[item.parent] += 1
                 except KeyError:
@@ -64,9 +72,9 @@ class SlotsCrawler:
                 logger.debug(f"\titem {item} has used {indents_used[item.parent]} indents "
                              f"of max {item.parent.nchildren}")
                 if indents_used[item.parent] >= item.parent.nchildren:
-                    indentstr += "└ "
+                    indentstr += "└─ "
                 else:
-                    indentstr += "├ "
+                    indentstr += "├─ "
 
             line = []
             for k in widths:
@@ -90,8 +98,8 @@ class SlotsCrawler:
         header = []
         spacer = []
         for col, width in widths.items():
-            header.append(col.ljust(width + extra))
-            spacer.append("─" * (width + extra))
+            header.append(col.ljust(width + whitespace))
+            spacer.append("─" * (width + whitespace))
         uspacer = "┬─".join(spacer)
         spacer = "┼─".join(spacer)
         header = "│ ".join(header)
@@ -103,7 +111,7 @@ class SlotsCrawler:
             for idx, item in enumerate(line):
                 width = list(widths.values())[idx]
 
-                tmp.append(item.ljust(width + extra))
+                tmp.append(item.ljust(width + whitespace))
 
             output.append("│ ".join(tmp))
 
@@ -146,13 +154,15 @@ class SlotsCrawler:
         """
         return str(self)
 
-    def print(self, debug=False) -> None:
+    def print(self, *args, **kwargs) -> None:
         """
         Print self
 
         This will initiate a crawl
 
+        See `Tree` for args
+
         :return:
             None
         """
-        print(self.tree(debug))
+        print(self.tree(*args, **kwargs))
