@@ -58,8 +58,8 @@ class Entity:
         if not isinstance(obj, str):
             logger.debug("\tobj is not a string, checking for iter")
             if hasattr(obj, "__iter__"):
-                self.iterable = True
-                logger.debug("\t\thas __iter__, True")
+                self.iterable = len(obj)
+                logger.debug(f"\t\thas __iter__, True, len {self.iterable}")
             else:
                 self.iterable = False
                 logger.debug("\t\tno __iter__, False")

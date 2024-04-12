@@ -113,7 +113,7 @@ class SlotsCrawler:
 
             line = []
             for k in widths:
-                if k == "value" and item.iterable:
+                if k == "value" and item.iterable and item.iterable > 0:
                     line.append(f"iterable: {item.classname}")
                     continue
                 if k == "entity":
