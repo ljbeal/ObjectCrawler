@@ -171,7 +171,12 @@ class SlotsCrawler:
 
         return "\n".join(output)
 
-    def _crawl(self, obj, assignment="~", source=None, parent=None, initialise=True):
+    def _crawl(self,
+               obj,
+               assignment: str = "~",
+               source: Union[None, str] = None,
+               parent: Union[None, Entity] = None,
+               initialise: bool = True) -> Entity:
         """
         Recursively crawl `obj`
 
