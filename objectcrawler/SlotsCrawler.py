@@ -122,6 +122,8 @@ class SlotsCrawler:
             source = o.__name__
             slots = o.__slots__
 
+            objEntity.nchildren += len(slots)
+
             for idx, item in enumerate(slots):
                 try:
                     tmp = getattr(obj, item)

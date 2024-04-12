@@ -32,10 +32,7 @@ class Entity:
         self.classname = obj.__class__.__name__
         self.value = str(obj)
 
-        slotslen = 0
-        if hasattr(obj, "__slots__"):
-            slotslen = len(obj.__slots__)
-        self.nchildren = slotslen
+        self.nchildren = 0
         self.parent = parent
 
     def __repr__(self) -> str:
