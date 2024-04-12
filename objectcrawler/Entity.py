@@ -21,7 +21,7 @@ class Entity:
             actual parent class where this entity was found
     """
 
-    __slots__ = ["assignment", "source", "classname", "value", "parent", "nchildren"]
+    __slots__ = ["assignment", "source", "classname", "value", "value_is_explicit", "parent", "nchildren"]
 
     def __init__(self, obj, assignment=None, source="self", parent: Union[None, "Entity"] = None):
         logger.debug(f"Creating Entity for object {obj} "
@@ -30,7 +30,11 @@ class Entity:
         self.source = source
 
         self.classname = obj.__class__.__name__
+
         self.value = str(obj)
+        # "value" is explicit of the str() representation is not just the memory
+        # this implies that the string method has intrinsic value
+        self.value_is_explicit = hex(id(obj)) not in self.value
 
         self.nchildren = 0
         self.parent = parent
@@ -40,7 +44,9 @@ class Entity:
         return f"Entity #{uid}"
 
     def __hash__(self) -> int:
-        return hash(self.assignment + self.value)
+        if self.value_is_explicit:
+            return hash(self.assignment + self.value)
+        return hash(self.assignment + self.classname)
 
     def __eq__(self, other):
         if hash(self) == hash(other):
