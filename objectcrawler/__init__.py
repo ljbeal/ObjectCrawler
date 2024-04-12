@@ -1,6 +1,6 @@
 import logging
 
-from objectcrawler.SlotsCrawler import SlotsCrawler
+from objectcrawler.Crawler import SlotsCrawler
 
 __all__ = ["SlotsCrawler"]
 
