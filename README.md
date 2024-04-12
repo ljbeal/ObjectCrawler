@@ -87,7 +87,11 @@ assignment    │ value                    │ classname     │ source
 
 ### Iterators
 
-Iterators are a special case, since they are implicit storage containers, an attempt is made to "unpack" them into the data tree
+Iterators are a special case, since they are implicit storage containers, an attempt is made to "unpack" them into the data tree.
+
+lists, tuples, etc. wil have their `assignment` set to the index
+
+dicts, OrderedDicts, etc. will have their `assignment` set to the key (the object must provide a `iter()` method for this functionality)
 
 ```python
 class Meal:
@@ -139,3 +143,102 @@ print(crawl_a - crawl_b)
 
 This will print out two joined tables with the differences highlighted in red.
 
+## Debug
+
+If you don't trust the output there exists a debug mode for the print which can help you figure out what's going on.
+
+To activate this we should create the actual `SlotsCrawler` object and store it in a variable:
+
+```python
+crawl = SlotsCrawler(c)
+```
+We can then print the info using the `print()` method. This can take extra args, including `debug`
+
+```python
+crawl.print(debug=True)
+```
+
+```
+────────────────────┬───────────────────────────────────────────┬───────────────┬───────────────┬───────────────────┬───────────────────┬───────────
+assignment          │ value                                     │ classname     │ source        │ entity            │ parent            │ nchildren 
+────────────────────┼───────────────────────────────────────────┼───────────────┼───────────────┼───────────────────┼───────────────────┼───────────
+~                   │ <__main__.Meal object at 0x7f4c9448d720>  │ Meal          │ None          │ Entity #56861989  │ None              │ 2         
+├─ name             │ Cheesy Beans on Toast                     │ str           │ Meal          │ Entity #73435104  │ Entity #56861989  │ 0         
+└─ ingredients      │ iterable: list                            │ list          │ Meal          │ Entity #56838411  │ Entity #56861989  │ 0         
+│  └─ 0             │ Food(Cheese)                              │ Food          │ Meal          │ Entity #38702362  │ Entity #56838411  │ 1         
+│  │  └─ name       │ Cheese                                    │ str           │ Food          │ Entity #53831869  │ Entity #38702362  │ 0         
+│  └─ 1             │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          │ Entity #80934124  │ Entity #56838411  │ 2         
+│  │  ├─ prep_time  │ 10                                        │ int           │ PreparedFood  │ Entity #15249089  │ Entity #80934124  │ 0         
+│  │  └─ name       │ Beans                                     │ str           │ Food          │ Entity #27896829  │ Entity #80934124  │ 0         
+│  └─ 2             │ PreparedFood(Toast, 5)                    │ PreparedFood  │ Meal          │ Entity #97199136  │ Entity #56838411  │ 2         
+│  │  ├─ prep_time  │ 5                                         │ int           │ PreparedFood  │ Entity #03636658  │ Entity #97199136  │ 0         
+│  │  └─ name       │ Toast                                     │ str           │ Food          │ Entity #87055037  │ Entity #97199136  │ 0         
+```
+
+### Debug output
+
+To understand what we're seeing here it can be helpful to know what's going on inside this table.
+
+Each row is represented by an `Entity` object. This stores some information about each attribute of the original object, but most importantly it stores the hierarchy of children.
+
+The extra columns added expose this information.
+
+The `entity` column contains part of the hash for the `Entity` in _that row_.
+
+The `parent` column contains part of the hash for the `Entity` that _provided_ the `Entity` in that row.
+
+The `nchildren` column is a counter of how many children that entity has, and is used for tree generation.
+
+## Formatting
+
+Similar to the debug, `print()` can also take some basic formatting arguments, `whitespace` and `branch_len`.
+
+`whitespace` dictates the amount of padding added to the end of each column, whereas `branch_len` controls the length of each "branch" in the tree.
+
+The best way to understand these args is to demonstrate them:
+
+### whitespace
+
+```python
+crawl.print(whitespace=10)
+```
+
+```
+────────────────────────────┬───────────────────────────────────────────────────┬───────────────────────┬───────────────────────
+assignment                  │ value                                             │ classname             │ source                
+────────────────────────────┼───────────────────────────────────────────────────┼───────────────────────┼───────────────────────
+~                           │ <__main__.Meal object at 0x7f4c9448d720>          │ Meal                  │ None                  
+├─ name                     │ Cheesy Beans on Toast                             │ str                   │ Meal                  
+└─ ingredients              │ iterable: list                                    │ list                  │ Meal                  
+│  └─ 0                     │ Food(Cheese)                                      │ Food                  │ Meal                  
+│  │  └─ name               │ Cheese                                            │ str                   │ Food                  
+│  └─ 1                     │ PreparedFood(Beans, 10)                           │ PreparedFood          │ Meal                  
+│  │  ├─ prep_time          │ 10                                                │ int                   │ PreparedFood          
+│  │  └─ name               │ Beans                                             │ str                   │ Food                  
+│  └─ 2                     │ PreparedFood(Toast, 5)                            │ PreparedFood          │ Meal                  
+│  │  ├─ prep_time          │ 5                                                 │ int                   │ PreparedFood          
+│  │  └─ name               │ Toast                                             │ str                   │ Food
+```
+
+### branch_len
+
+```python
+crawl.print(branch_len=4)
+```
+
+```
+─────────────────────────────┬───────────────────────────────────────────┬───────────────┬───────────────
+assignment                   │ value                                     │ classname     │ source        
+─────────────────────────────┼───────────────────────────────────────────┼───────────────┼───────────────
+~                            │ <__main__.Meal object at 0x7f4c9448d720>  │ Meal          │ None          
+├──── name                   │ Cheesy Beans on Toast                     │ str           │ Meal          
+└──── ingredients            │ iterable: list                            │ list          │ Meal          
+│     └──── 0                │ Food(Cheese)                              │ Food          │ Meal          
+│     │     └──── name       │ Cheese                                    │ str           │ Food          
+│     └──── 1                │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          
+│     │     ├──── prep_time  │ 10                                        │ int           │ PreparedFood  
+│     │     └──── name       │ Beans                                     │ str           │ Food          
+│     └──── 2                │ PreparedFood(Toast, 5)                    │ PreparedFood  │ Meal          
+│     │     ├──── prep_time  │ 5                                         │ int           │ PreparedFood  
+│     │     └──── name       │ Toast                                     │ str           │ Food
+```
