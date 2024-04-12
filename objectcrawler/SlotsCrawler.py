@@ -33,6 +33,12 @@ class SlotsCrawler:
                 item.diff = True
             diff.append(item)
 
+        diff.append(None)
+        for item in other.data:
+            if item not in self.data:
+                item.diff = True
+            diff.append(item)
+
         return self.tree(diff)
 
     def tree(self,
@@ -73,6 +79,9 @@ class SlotsCrawler:
         indents = {}
         indents_used = {}
         for item in data:
+            if item is None:
+                cache.append([None] * len(widths))
+                continue
             logger.debug(f"treating item {item}")
             logger.debug(f"\tparent is {item.parent}")
             if item.parent not in indents:
@@ -109,7 +118,7 @@ class SlotsCrawler:
                 else:
                     val = str(getattr(item, k))
 
-                if item.diff:
+                if  item.diff and k in ("assignment", "value"):
                     val = f"\x1b[31m{val}\x1b[0m"
 
                 if k == "assignment":
@@ -137,15 +146,25 @@ class SlotsCrawler:
         output = [uspacer, header, spacer]
         for line in cache:
             tmp = []
+            spacer = False
             for idx, item in enumerate(line):
                 width = list(widths.values())[idx]
                 ljust = width + whitespace
+
+                if item is None:
+                    tmp.append("─" * ljust)
+                    spacer = True
+                    continue
+
                 # need to adjust for colouration, if present
                 if "\x1b[31m" in item:
                     ljust += 9
                 tmp.append(item.ljust(ljust))
 
-            output.append("│ ".join(tmp))
+            if not spacer:
+                output.append("│ ".join(tmp))
+            else:
+                output.append("┼─".join(tmp))
 
         return "\n".join(output)
 
