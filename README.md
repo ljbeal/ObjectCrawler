@@ -1,6 +1,8 @@
 # objectcrawler
 
-Basic and lightweight python tool for inspecting small python classes exposing `__slots__`
+Basic and lightweight python tool for inspecting python objects.
+
+Originally built for objects defining `__slots__`, however it also handles the `__dict__` attribute just fine.
 
 ## Installation
 
@@ -14,11 +16,11 @@ Feel free to file a pull request if you make any changes!
 
 ## Usage
 
-Inspecting an object is simple, import the `SlotsCrawler` class and feed it the object in question:
+Inspecting an object is simple, import the `Crawler` class and feed it the object in question:
 
 ```python
-from objectcrawler import SlotsCrawler
-print(SlotsCrawler(...))
+from objectcrawler import Crawler
+print(Crawler(...))
 ```
 
 ### Demo
@@ -38,9 +40,9 @@ class Food:
 After creating an instance of this class, we can inspect it:
 
 ```python
-from objectcrawler import SlotsCrawler
+from objectcrawler import Crawler
 a = Food("Apple")
-print(SlotsCrawler(a))
+print(Crawler(a))
 ```
 
 This will output the following table:
@@ -71,7 +73,7 @@ class PreparedFood(Food):
         return f"PreparedFood({self.name}, {self.prep_time})"
 
 b = PreparedFood("Pasta", 10)
-print(SlotsCrawler(b))
+print(Crawler(b))
 ```
 
 Giving the following table. Note the `source` column:
@@ -107,7 +109,7 @@ ingredients = [
 ]
 
 c = Meal("Cheesy Beans on Toast", ingredients)
-print(SlotsCrawler(c))
+print(Crawler(c))
 ```
 
 ```
@@ -129,14 +131,14 @@ assignment          │ value                                     │ classname 
 
 ## Differences
 
-If you're trying to debug a class and have one working example of it, you can quickly find the issues by differencing it with a broken version. To do this, you should create two SlotsCrawler instances (one working, and one not). You can then "subtract" these objects to reveal the differences.
+If you're trying to debug a class and have one working example of it, you can quickly find the issues by differencing it with a broken version. To do this, you should create two Crawler instances (one working, and one not). You can then "subtract" these objects to reveal the differences.
 
 ```python
 a = Object(...)
 b = Object(...)
 
-crawl_a = SlotsCrawler(a)
-crawl_b = SlotsCrawler(b)
+crawl_a = Crawler(a)
+crawl_b = Crawler(b)
 
 print(crawl_a - crawl_b)
 ```
@@ -147,10 +149,10 @@ This will print out two joined tables with the differences highlighted in red.
 
 If you don't trust the output there exists a debug mode for the print which can help you figure out what's going on.
 
-To activate this we should create the actual `SlotsCrawler` object and store it in a variable:
+To activate this we should create the actual `Crawler` object and store it in a variable:
 
 ```python
-crawl = SlotsCrawler(c)
+crawl = Crawler(c)
 ```
 We can then print the info using the `print()` method. This can take extra args, including `debug`
 
