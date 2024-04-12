@@ -172,6 +172,21 @@ class SlotsCrawler:
         return "\n".join(output)
 
     def _crawl(self, obj, assignment="~", source=None, parent=None, initialise=True):
+        """
+        Recursively crawl `obj`
+
+        Args:
+            obj:
+                object in question
+            assignment:
+                explicitly set the variable to which obj is assigned. Entity tries to retrieve it otherwise
+            source:
+                explicitly set the source (for recursion)
+            parent:
+                set the parent (for recursion)
+            initialise:
+                wipes the data tree for a fresh run if True
+        """
         logger.debug(f"crawling object {obj}")
         objEntity = Entity(obj, assignment=assignment, source=source, parent=parent)
         if initialise:
@@ -195,7 +210,7 @@ class SlotsCrawler:
                     tmp = str(E)
 
                 parent = self._crawl(tmp, assignment=item, source=source, parent=objEntity, initialise=False)
-
+                # if we have an iterable, we should iterate over it and expand the objects
                 if not isinstance(tmp, str) and hasattr(tmp, "__iter__"):
                     try:
                         for k, v in tmp.items():
@@ -203,7 +218,7 @@ class SlotsCrawler:
                     except AttributeError:
                         for i, v in enumerate(tmp):
                             self._crawl(v, assignment=str(i), source=source, parent=parent, initialise=False)
-
+        # return the object for further iteration if needed within recursion
         return objEntity
 
     @property
