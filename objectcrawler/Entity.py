@@ -21,17 +21,22 @@ class Entity:
             actual parent class where this entity was found
     """
 
-    __slots__ = ["assignment", "source", "classname", "value", "parent"]
+    __slots__ = ["assignment", "source", "classname", "value", "parent", "nchildren"]
 
     def __init__(self, obj, assignment=None, source="self", parent: Union[None, "Entity"] = None):
         logger.debug(f"Creating Entity for object {obj} "
                      f"with assignment: {assignment}, source: {source}, parent: {parent}")
         self.assignment = assignment or get_assignment(obj)
         self.source = source
-        self.parent = parent
 
         self.classname = obj.__class__.__name__
         self.value = str(obj)
+
+        slotslen = 0
+        if hasattr(obj, "__slots__"):
+            slotslen = len(obj.__slots__)
+        self.nchildren = slotslen
+        self.parent = parent
 
     def __repr__(self) -> str:
         uid = str(hash(self))[-8:]
