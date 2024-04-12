@@ -200,15 +200,16 @@ class SlotsCrawler:
             self.data.append(objEntity)
 
         for o in obj.__class__.__mro__:
-            if not hasattr(o, "__slots__"):
+            source = o.__name__
+
+            members = getattr(o, "__slots__", [])
+
+            if len(members) == 0:
                 continue
 
-            source = o.__name__
-            slots = o.__slots__
+            objEntity.nchildren += len(members)
 
-            objEntity.nchildren += len(slots)
-
-            for idx, item in enumerate(slots):
+            for idx, item in enumerate(members):
                 try:
                     tmp = getattr(obj, item)
                 except Exception as E:
