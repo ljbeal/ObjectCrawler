@@ -229,6 +229,7 @@ class Crawler:
                 parent = self._crawl(tmp, assignment=item, source=source, parent=objEntity, initialise=False)
                 # if we have an iterable, we should iterate over it and expand the objects
                 if not isinstance(tmp, str) and hasattr(tmp, "__iter__"):
+                    parent.nchildren += len(tmp)
                     try:
                         for k, v in tmp.items():
                             self._crawl(v, assignment=str(k), source=source, parent=parent, initialise=False)
