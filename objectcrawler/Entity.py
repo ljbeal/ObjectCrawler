@@ -33,8 +33,9 @@ class Entity:
         self.classname = obj.__class__.__name__
         self.value = str(obj)
 
-    def __repr__(self):
-        return f"Entity {self.classname} @ {self.assignment}"
+    def __repr__(self) -> str:
+        uid = str(hash(self))[:8]
+        return f"Entity #{uid}"
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.assignment + self.value)
