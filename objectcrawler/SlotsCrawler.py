@@ -23,7 +23,10 @@ class SlotsCrawler:
     def __str__(self):
         return self.tree()
 
-    def tree(self, debug: bool = False, whitespace: int = 2) -> str:
+    def tree(self,
+             debug: bool = False,
+             whitespace: int = 2,
+             branch_len: int = 1) -> str:
         """
         Analyse the stored object
 
@@ -32,6 +35,8 @@ class SlotsCrawler:
                 prints extra debug info if True
             whitespace:
                 Sets level of whitespace at the end of each column
+            branch_len:
+                Sets length of "branch" horizontal lines
         """
         logger.info("generating tree")
         self._crawl(self.obj, initialise=True)
@@ -61,10 +66,12 @@ class SlotsCrawler:
             indents[item] = indent
             logging.debug(f"\tindent level set to {indent}")
 
+            branch = "─" * branch_len + " "
             if indent == 0:
                 indentstr = ""
             else:
-                indentstr =  "│  " * (indent - 1)
+                # generate basic indent string, taking branch length into account
+                indentstr =  ("│" + " " * (branch_len + 1) ) * (indent - 1)
                 try:
                     indents_used[item.parent] += 1
                 except KeyError:
@@ -72,9 +79,9 @@ class SlotsCrawler:
                 logger.debug(f"\titem {item} has used {indents_used[item.parent]} indents "
                              f"of max {item.parent.nchildren}")
                 if indents_used[item.parent] >= item.parent.nchildren:
-                    indentstr += "└─ "
+                    indentstr += "└" + branch
                 else:
-                    indentstr += "├─ "
+                    indentstr += "├" + branch
 
             line = []
             for k in widths:
