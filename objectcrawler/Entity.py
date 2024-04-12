@@ -34,7 +34,7 @@ class Entity:
         self.value = str(obj)
 
     def __repr__(self) -> str:
-        uid = str(hash(self))[:8]
+        uid = str(hash(self))[-8:]
         return f"Entity #{uid}"
 
     def __hash__(self) -> int:
