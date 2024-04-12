@@ -196,11 +196,14 @@ class Crawler:
         objEntity = Entity(obj, assignment=assignment, source=source, parent=parent)
         if initialise:
             self.data = [objEntity]
-        else:
+        elif objEntity not in self.data:
             self.data.append(objEntity)
 
         for o in obj.__class__.__mro__:
+            logger.debug(f"parsing mro object {o}")
             source = o.__name__
+            if source == "object":
+                continue
 
             members = getattr(o, "__slots__", [])
 
