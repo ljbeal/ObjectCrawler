@@ -39,3 +39,7 @@ class Entity:
 
     def __hash__(self) -> int:
         return hash(self.assignment + self.value)
+
+    def __eq__(self, other):
+        if hash(self) == hash(other):
+            return True
