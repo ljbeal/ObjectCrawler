@@ -109,13 +109,13 @@ class SlotsCrawler:
                 else:
                     val = str(getattr(item, k))
 
+                if item.diff:
+                    val = f"\x1b[31m{val}\x1b[0m"
+
                 if k == "assignment":
                     val = indentstr + val
 
-                if item.diff:
-                    line.append(f"\x1b[31m{val}\x1b[0m")
-                else:
-                    line.append(val)
+                line.append(val)
                 # update the lengths if necessary
                 if len(val) > widths[k]:
                     widths[k] = len(val)
