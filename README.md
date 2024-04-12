@@ -123,3 +123,19 @@ assignment          │ value                                     │ classname 
 │  │  └─ name       │ Toast                                     │ str           │ Food          
 ```
 
+## Differences
+
+If you're trying to debug a class and have one working example of it, you can quickly find the issues by differencing it with a broken version. To do this, you should create two SlotsCrawler instances (one working, and one not). You can then "subtract" these objects to reveal the differences.
+
+```python
+a = Object(...)
+b = Object(...)
+
+crawl_a = SlotsCrawler(a)
+crawl_b = SlotsCrawler(b)
+
+print(crawl_a - crawl_b)
+```
+
+This will print out two joined tables with the differences highlighted in red.
+
