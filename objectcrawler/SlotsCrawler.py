@@ -23,7 +23,7 @@ class SlotsCrawler:
     def __str__(self):
         return self.tree()
 
-    def tree(self):
+    def tree(self, debug=False):
         logger.info("generating tree")
         self._crawl(self.obj, initialise=True)
 
@@ -34,9 +34,11 @@ class SlotsCrawler:
         widths = {"assignment": 10,
                   "value": 5,
                   "classname": 9,
-                  "source": 6,
-                  "entity": 6,
-                  "parent": 6}
+                  "source": 6}
+
+        if debug:
+            widths.update({"entity": 6, "parent": 6})
+
         extra = 2  # extra whitespace
         # cache a list of lines, for later treating dependent on col widths
         cache = []
@@ -92,8 +94,6 @@ class SlotsCrawler:
 
             output.append("│ ".join(tmp))
 
-        print(indents)
-
         return "\n".join(output)
 
     def _crawl(self, obj, assignment=None, initialise=True):
@@ -130,7 +130,7 @@ class SlotsCrawler:
         """
         return str(self)
 
-    def print(self) -> None:
+    def print(self, debug=False) -> None:
         """
         Print self
 
@@ -139,4 +139,4 @@ class SlotsCrawler:
         :return:
             None
         """
-        print(self.str)
+        print(self.tree(debug))
