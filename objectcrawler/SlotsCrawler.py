@@ -46,7 +46,7 @@ class SlotsCrawler:
             logger.debug(f"\tparent is {item.parent}")
             if item.parent not in indents:
                 indent = 0
-                logger.debug(f"\t\tparent {item.parent} not in indents, setting to O")
+                logger.debug(f"\t\tparent {item.parent} not in indents, setting to 0")
             else:
                 indent = indents[item.parent] + 1
                 logger.debug(f"\t\tfound parent {item.parent} at indent {indent - 1}")
