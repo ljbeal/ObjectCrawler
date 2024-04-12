@@ -21,7 +21,17 @@ class Entity:
             actual parent class where this entity was found
     """
 
-    __slots__ = ["assignment", "source", "classname", "value", "value_is_explicit", "parent", "nchildren", "diff"]
+    __slots__ = [
+        "assignment",
+        "source",
+        "classname",
+        "value",
+        "value_is_explicit",
+        "parent",
+        "nchildren",
+        "diff",
+        "iterable",
+        ]
 
     def __init__(self, obj, assignment=None, source="self", parent: Union[None, "Entity"] = None):
         logger.debug(f"Creating Entity for object {obj} "
@@ -40,6 +50,17 @@ class Entity:
         self.parent = parent
 
         self.diff = False
+
+        if not isinstance(obj, str):
+            logger.debug("\tobj is not a string, checking for iter")
+            if hasattr(obj, "__iter__"):
+                self.iterable = True
+                logger.debug("\t\thas __iter__, True")
+            else:
+                self.iterable = False
+                logger.debug("\t\tno __iter__, False")
+        else:
+            self.iterable = False
 
     def __repr__(self) -> str:
         uid = str(hash(self))[-8:]
