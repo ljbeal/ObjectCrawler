@@ -27,15 +27,11 @@ class SlotsCrawler:
         logger.info("generating tree")
         self._crawl(self.obj, initialise=True)
 
-        chars = {"pass": "│",
-                 "branch": "├",
-                 "end": "└"}
         # calculate column widths, pre-fill with title lengths
         widths = {"assignment": 10,
                   "value": 5,
                   "classname": 9,
                   "source": 6}
-
         if debug:
             widths.update({"entity": 6, "parent": 6})
 
