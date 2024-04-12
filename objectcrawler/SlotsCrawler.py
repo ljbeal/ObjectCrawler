@@ -33,12 +33,13 @@ class SlotsCrawler:
                   "classname": 9,
                   "source": 6}
         if debug:
-            widths.update({"entity": 6, "parent": 6})
+            widths.update({"entity": 6, "parent": 6, "nchildren": 8})
 
         extra = 2  # extra whitespace
         # cache a list of lines, for later treating dependent on col widths
         cache = []
         indents = {}
+        indents_used = {}
         for item in self.data:
             logger.debug(f"treating item {item}")
             logger.debug(f"\tparent is {item.parent}")
@@ -52,6 +53,21 @@ class SlotsCrawler:
             indents[item] = indent
             logging.debug(f"\tindent level set to {indent}")
 
+            if indent == 0:
+                indentstr = ""
+            else:
+                indentstr =  "│ " * (indent - 1)
+                try:
+                    indents_used[item.parent] += 1
+                except KeyError:
+                    indents_used[item.parent] = 1
+                logger.debug(f"\titem {item} has used {indents_used[item.parent]} indents "
+                             f"of max {item.parent.nchildren}")
+                if indents_used[item.parent] >= item.parent.nchildren:
+                    indentstr += "└ "
+                else:
+                    indentstr += "├ "
+
             line = []
             for k in widths:
                 if k == "entity":
@@ -60,7 +76,8 @@ class SlotsCrawler:
                     val = str(getattr(item, k))
 
                 if k == "assignment":
-                    val = "  " * indent + val
+                    val = indentstr + val
+
                 line.append(val)
                 # update the lengths if necessary
                 if len(val) > widths[k]:
