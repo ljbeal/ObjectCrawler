@@ -93,6 +93,7 @@ class SlotsCrawler:
         return "\n".join(output)
 
     def _crawl(self, obj, assignment=None, initialise=True):
+        logger.debug(f"crawling object {obj}")
         objEntity = Entity(obj, assignment=assignment)
         if initialise:
             self.data = [objEntity]
