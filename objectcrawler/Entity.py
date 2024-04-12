@@ -40,8 +40,8 @@ class Entity:
 
         logger.debug(f"Creating Entity for object {obj} "
                      f"with assignment: {assignment}, source: {source}, parent: {parent}")
-        self.assignment = assignment or get_assignment(obj)
-        self.source = source
+        self.assignment = str(assignment) or get_assignment(obj)
+        self.source = str(source)
 
         self.classname = obj.__class__.__name__
 
