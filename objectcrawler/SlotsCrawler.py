@@ -20,6 +20,8 @@ class SlotsCrawler:
         self.obj = obj
         self.data = []
 
+        self._crawl(obj, initialise=True)
+
     def __str__(self):
         return self.tree()
 
