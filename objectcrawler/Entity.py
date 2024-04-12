@@ -1,6 +1,9 @@
+import logging
 from typing import Union
 
 from objectcrawler.get_assignment import get_assignment
+
+logger = logging.getLogger(__name__)
 
 
 class Entity:
@@ -21,6 +24,8 @@ class Entity:
     __slots__ = ["assignment", "source", "classname", "value", "parent"]
 
     def __init__(self, obj, assignment=None, source="self", parent: Union[None, "Entity"] = None):
+        logger.debug(f"Creating Entity for object {obj} "
+                     f"with assignment: {assignment}, source: {source}, parent: {parent}")
         self.assignment = assignment or get_assignment(obj)
         self.source = source
         self.parent = parent
