@@ -4,8 +4,8 @@ Basic and lightweight python tool for inspecting small python classes exposing `
 
 ## Installation
 
-1) Fork this repo
-2) Clone the repo to your machine
+1) Create a fork of this repo
+2) Clone the forked repo to your machine
 3) Install with `pip install ObjectCrawler`
 
 For development you can install using the pip `-e` editable flag.
@@ -49,7 +49,7 @@ This will output the following table:
 ────────────┬──────────────┬────────────┬─────────
 assignment  │ value        │ classname  │ source  
 ────────────┼──────────────┼────────────┼─────────
-None        │ Food(Apple)  │ Food       │ self    
+~           │ Food(Apple)  │ Food       │ self    
 └─ name     │ Apple        │ str        │ Food  
 ```
 
@@ -80,9 +80,9 @@ Giving the following table. Note the `source` column:
 ──────────────┬──────────────────────────┬───────────────┬───────────────
 assignment    │ value                    │ classname     │ source        
 ──────────────┼──────────────────────────┼───────────────┼───────────────
-None          │ PreparedFood(Pasta, 10)  │ PreparedFood  │ self          
+~             │ PreparedFood(Pasta, 10)  │ PreparedFood  │ None          
 ├─ prep_time  │ 10                       │ int           │ PreparedFood  
-└─ name       │ Pasta                    │ str           │ Food       
+└─ name       │ Pasta                    │ str           │ Food            
 ```
 
 ### Iterators
