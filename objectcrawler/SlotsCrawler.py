@@ -113,6 +113,9 @@ class SlotsCrawler:
 
             line = []
             for k in widths:
+                if k == "value" and item.iterable:
+                    line.append(f"iterable: {item.classname}")
+                    continue
                 if k == "entity":
                     val = str(item)
                 else:
@@ -188,7 +191,17 @@ class SlotsCrawler:
                     tmp = getattr(obj, item)
                 except Exception as E:
                     tmp = str(E)
-                self.data.append(Entity(tmp, assignment=item, source=source, parent=objEntity))
+                tmpEntity = Entity(tmp, assignment=item, source=source, parent=objEntity)
+                self.data.append(tmpEntity)
+
+                if tmpEntity.iterable:
+                    tmpEntity.nchildren += len(tmp)
+                    try:
+                        for k, v in tmp.items():
+                            self.data.append(Entity(v, assignment=k, source=source, parent=tmpEntity))
+                    except AttributeError:
+                        for i, v in enumerate(tmp):
+                            self.data.append(Entity(v, assignment=str(i), source=source, parent=tmpEntity))
 
                 if hasattr(tmp, "__slots__"):
                     self._crawl(tmp, assignment=item, initialise=False)
