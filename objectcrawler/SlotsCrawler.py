@@ -171,11 +171,13 @@ class SlotsCrawler:
 
         return "\n".join(output)
 
-    def _crawl(self, obj, assignment=None, initialise=True):
+    def _crawl(self, obj, assignment="~", source=None, parent=None, initialise=True):
         logger.debug(f"crawling object {obj}")
-        objEntity = Entity(obj, assignment=assignment)
+        objEntity = Entity(obj, assignment=assignment, source=source, parent=parent)
         if initialise:
             self.data = [objEntity]
+        else:
+            self.data.append(objEntity)
 
         for o in obj.__class__.__mro__:
             if not hasattr(o, "__slots__"):
@@ -191,20 +193,18 @@ class SlotsCrawler:
                     tmp = getattr(obj, item)
                 except Exception as E:
                     tmp = str(E)
-                tmpEntity = Entity(tmp, assignment=item, source=source, parent=objEntity)
-                self.data.append(tmpEntity)
 
-                if tmpEntity.iterable:
-                    tmpEntity.nchildren += len(tmp)
+                parent = self._crawl(tmp, assignment=item, source=source, parent=objEntity, initialise=False)
+
+                if not isinstance(tmp, str) and hasattr(tmp, "__iter__"):
                     try:
                         for k, v in tmp.items():
-                            self.data.append(Entity(v, assignment=k, source=source, parent=tmpEntity))
+                            self._crawl(v, assignment=str(k), source=source, parent=parent, initialise=False)
                     except AttributeError:
                         for i, v in enumerate(tmp):
-                            self.data.append(Entity(v, assignment=str(i), source=source, parent=tmpEntity))
+                            self._crawl(v, assignment=str(i), source=source, parent=parent, initialise=False)
 
-                if hasattr(tmp, "__slots__"):
-                    self._crawl(tmp, assignment=item, initialise=False)
+        return objEntity
 
     @property
     def str(self) -> str:
