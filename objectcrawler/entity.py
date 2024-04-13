@@ -22,6 +22,9 @@ class Entity:
             actual parent class where this entity was found
     """
 
+    # pylint: disable=too-many-instance-attributes
+    # we're using slots, so need to specify _everything_
+
     __slots__ = [
         "assignment",
         "source",
