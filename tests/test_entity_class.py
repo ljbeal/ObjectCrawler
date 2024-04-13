@@ -41,3 +41,10 @@ class TestEntity:
 
     def test_non_explicit_value(self):
         assert not self.entities["nonstring"].value_is_explicit
+
+    def test_is_not_eq(self):
+        assert self.entities["simple"] != self.entities["nonstring"]
+
+    def test_is_eq(self):
+        new = Entity(Simple("test"), assignment="simple", source="test")
+        assert new == self.entities["simple"]
