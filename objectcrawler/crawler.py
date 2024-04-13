@@ -116,7 +116,7 @@ class Crawler:
                     indentstr += "├" + branch
 
             line = []
-            for k in widths:
+            for k in widths:  # pylint: disable=consider-using-dict-items
                 if k == "value" and item.iterable and item.iterable > 0:
                     line.append(f"iterable: {item.classname}")
                     continue
@@ -217,7 +217,7 @@ class Crawler:
             if hasattr(obj, "__dict__"):
                 for item in obj.__dict__:
                     if not item.startswith("__"):
-                        logger.debug("\tadding %", item)
+                        logger.debug("\tadding %s", item)
                         members.append(item)
                     else:
                         logger.debug("\tskipped %s", item)
@@ -227,11 +227,11 @@ class Crawler:
 
             obj_entity.nchildren += len(members)
 
-            for idx, item in enumerate(members):
+            for item in members:
                 try:
                     tmp = getattr(obj, item)
-                except Exception as E:
-                    tmp = str(E)
+                except Exception as e:  # pylint: disable=broad-exception-caught
+                    tmp = str(e)
 
                 parent = self._crawl(
                     tmp,
