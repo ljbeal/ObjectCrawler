@@ -1,4 +1,4 @@
-from objectcrawler.Entity import Entity
+from objectcrawler.entity import Entity
 
 
 class Simple:

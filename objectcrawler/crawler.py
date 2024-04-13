@@ -5,7 +5,7 @@ Module holding main crawler for __slots__ based objects
 import logging
 from typing import Union
 
-from objectcrawler.Entity import Entity
+from objectcrawler.entity import Entity
 
 
 logger = logging.getLogger(__name__)
@@ -82,8 +82,8 @@ class Crawler:
             if item is None:
                 cache.append([None] * len(widths))
                 continue
-            logger.debug(f"treating item {item}")
-            logger.debug(f"\tparent is {item.parent}")
+            logger.debug("treating item %item".format(item))
+            logger.debug("parent is %parent".format(item.parent))
             if item.parent not in indents:
                 indent = 0
                 logger.debug(f"\t\tparent {item.parent} not in indents, setting to 0")

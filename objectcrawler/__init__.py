@@ -1,6 +1,9 @@
+"""
+Toplevel __init__ providing all tools and logger
+"""
 import logging
 
-from objectcrawler.Crawler import Crawler
+from objectcrawler.crawler import Crawler
 
 __all__ = ["Crawler"]
 
