@@ -81,6 +81,7 @@ class Entity:
             return hash(self.assignment + self.value)
         return hash(self.assignment + self.classname)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if hash(self) == hash(other):
             return True
+        return False
