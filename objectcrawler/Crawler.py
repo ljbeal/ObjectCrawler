@@ -1,6 +1,7 @@
 """
 Module holding main crawler for __slots__ based objects
 """
+
 import logging
 from typing import Union
 
@@ -41,11 +42,13 @@ class Crawler:
 
         return self.tree(diff)
 
-    def tree(self,
-             data: Union[None, list] = None,
-             debug: bool = False,
-             whitespace: int = 2,
-             branch_len: int = 1) -> str:
+    def tree(
+        self,
+        data: Union[None, list] = None,
+        debug: bool = False,
+        whitespace: int = 2,
+        branch_len: int = 1,
+    ) -> str:
         """
         Analyse the stored object
 
@@ -67,10 +70,7 @@ class Crawler:
             data = self.data
 
         # calculate column widths, pre-fill with title lengths
-        widths = {"assignment": 10,
-                  "value": 5,
-                  "classname": 9,
-                  "source": 6}
+        widths = {"assignment": 10, "value": 5, "classname": 9, "source": 6}
         if debug:
             widths.update({"entity": 6, "parent": 6, "nchildren": 8})
 
@@ -99,13 +99,15 @@ class Crawler:
                 indentstr = ""
             else:
                 # generate basic indent string, taking branch length into account
-                indentstr =  ("│" + " " * (branch_len + 1) ) * (indent - 1)
+                indentstr = ("│" + " " * (branch_len + 1)) * (indent - 1)
                 try:
                     indents_used[item.parent] += 1
                 except KeyError:
                     indents_used[item.parent] = 1
-                logger.debug(f"\titem {item} has used {indents_used[item.parent]} indents "
-                             f"of max {item.parent.nchildren}")
+                logger.debug(
+                    f"\titem {item} has used {indents_used[item.parent]} indents "
+                    f"of max {item.parent.nchildren}"
+                )
                 if indents_used[item.parent] >= item.parent.nchildren:
                     indentstr += "└" + branch
                 else:
@@ -171,12 +173,14 @@ class Crawler:
 
         return "\n".join(output)
 
-    def _crawl(self,
-               obj,
-               assignment: str = "~",
-               source: Union[None, str] = None,
-               parent: Union[None, Entity] = None,
-               initialise: bool = True) -> Entity:
+    def _crawl(
+        self,
+        obj,
+        assignment: str = "~",
+        source: Union[None, str] = None,
+        parent: Union[None, Entity] = None,
+        initialise: bool = True,
+    ) -> Entity:
         """
         Recursively crawl `obj`
 
@@ -184,7 +188,8 @@ class Crawler:
             obj:
                 object in question
             assignment:
-                explicitly set the variable to which obj is assigned. Entity tries to retrieve it otherwise
+                explicitly set the variable to which obj is assigned.
+                Entity tries to retrieve it otherwise
             source:
                 explicitly set the source (for recursion)
             parent:
@@ -226,16 +231,34 @@ class Crawler:
                 except Exception as E:
                     tmp = str(E)
 
-                parent = self._crawl(tmp, assignment=item, source=source, parent=objEntity, initialise=False)
+                parent = self._crawl(
+                    tmp,
+                    assignment=item,
+                    source=source,
+                    parent=objEntity,
+                    initialise=False,
+                )
                 # if we have an iterable, we should iterate over it and expand the objects
                 if not isinstance(tmp, str) and hasattr(tmp, "__iter__"):
                     parent.nchildren += len(tmp)
                     try:
                         for k, v in tmp.items():
-                            self._crawl(v, assignment=str(k), source=source, parent=parent, initialise=False)
+                            self._crawl(
+                                v,
+                                assignment=str(k),
+                                source=source,
+                                parent=parent,
+                                initialise=False,
+                            )
                     except AttributeError:
                         for i, v in enumerate(tmp):
-                            self._crawl(v, assignment=str(i), source=source, parent=parent, initialise=False)
+                            self._crawl(
+                                v,
+                                assignment=str(i),
+                                source=source,
+                                parent=parent,
+                                initialise=False,
+                            )
         # return the object for further iteration if needed within recursion
         return objEntity
 

@@ -31,16 +31,20 @@ class Entity:
         "nchildren",
         "diff",
         "iterable",
-        ]
+    ]
 
-    def __init__(self,
-                 obj,
-                 assignment: Union[None, str] = None,
-                 source: str = "self",
-                 parent: Union[None, "Entity"] = None):
+    def __init__(
+        self,
+        obj,
+        assignment: Union[None, str] = None,
+        source: str = "self",
+        parent: Union[None, "Entity"] = None,
+    ):
 
-        logger.debug(f"Creating Entity for object {obj} "
-                     f"with assignment: {assignment}, source: {source}, parent: {parent}")
+        logger.debug(
+            f"Creating Entity for object {obj} "
+            f"with assignment: {assignment}, source: {source}, parent: {parent}"
+        )
         self.assignment = str(assignment) or get_assignment(obj)
         self.source = str(source)
 
