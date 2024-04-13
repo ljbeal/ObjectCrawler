@@ -116,17 +116,17 @@ print(Crawler(c))
 ────────────────────┬───────────────────────────────────────────┬───────────────┬───────────────
 assignment          │ value                                     │ classname     │ source        
 ────────────────────┼───────────────────────────────────────────┼───────────────┼───────────────
-~                   │ <__main__.Meal object at 0x7f4c9448d720>  │ Meal          │ None          
+~                   │ <__main__.Meal object at 0x762f4d65de10>  │ Meal          │ None          
 ├─ name             │ Cheesy Beans on Toast                     │ str           │ Meal          
 └─ ingredients      │ iterable: list                            │ list          │ Meal          
-│  └─ 0             │ Food(Cheese)                              │ Food          │ Meal          
+│  ├─ 0             │ Food(Cheese)                              │ Food          │ Meal          
 │  │  └─ name       │ Cheese                                    │ str           │ Food          
-│  └─ 1             │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          
+│  ├─ 1             │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          
 │  │  ├─ prep_time  │ 10                                        │ int           │ PreparedFood  
 │  │  └─ name       │ Beans                                     │ str           │ Food          
 │  └─ 2             │ PreparedFood(Toast, 5)                    │ PreparedFood  │ Meal          
 │  │  ├─ prep_time  │ 5                                         │ int           │ PreparedFood  
-│  │  └─ name       │ Toast                                     │ str           │ Food          
+│  │  └─ name       │ Toast                                     │ str           │ Food                
 ```
 
 ## Differences
@@ -164,17 +164,17 @@ crawl.print(debug=True)
 ────────────────────┬───────────────────────────────────────────┬───────────────┬───────────────┬───────────────────┬───────────────────┬───────────
 assignment          │ value                                     │ classname     │ source        │ entity            │ parent            │ nchildren 
 ────────────────────┼───────────────────────────────────────────┼───────────────┼───────────────┼───────────────────┼───────────────────┼───────────
-~                   │ <__main__.Meal object at 0x7f4c9448d720>  │ Meal          │ None          │ Entity #56861989  │ None              │ 2         
-├─ name             │ Cheesy Beans on Toast                     │ str           │ Meal          │ Entity #73435104  │ Entity #56861989  │ 0         
-└─ ingredients      │ iterable: list                            │ list          │ Meal          │ Entity #56838411  │ Entity #56861989  │ 0         
-│  └─ 0             │ Food(Cheese)                              │ Food          │ Meal          │ Entity #38702362  │ Entity #56838411  │ 1         
-│  │  └─ name       │ Cheese                                    │ str           │ Food          │ Entity #53831869  │ Entity #38702362  │ 0         
-│  └─ 1             │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          │ Entity #80934124  │ Entity #56838411  │ 2         
-│  │  ├─ prep_time  │ 10                                        │ int           │ PreparedFood  │ Entity #15249089  │ Entity #80934124  │ 0         
-│  │  └─ name       │ Beans                                     │ str           │ Food          │ Entity #27896829  │ Entity #80934124  │ 0         
-│  └─ 2             │ PreparedFood(Toast, 5)                    │ PreparedFood  │ Meal          │ Entity #97199136  │ Entity #56838411  │ 2         
-│  │  ├─ prep_time  │ 5                                         │ int           │ PreparedFood  │ Entity #03636658  │ Entity #97199136  │ 0         
-│  │  └─ name       │ Toast                                     │ str           │ Food          │ Entity #87055037  │ Entity #97199136  │ 0         
+~                   │ <__main__.Meal object at 0x762f4d65de10>  │ Meal          │ None          │ Entity #47004730  │ None              │ 2         
+├─ name             │ Cheesy Beans on Toast                     │ str           │ Meal          │ Entity #91735648  │ Entity #47004730  │ 0         
+└─ ingredients      │ iterable: list                            │ list          │ Meal          │ Entity #43691166  │ Entity #47004730  │ 3         
+│  ├─ 0             │ Food(Cheese)                              │ Food          │ Meal          │ Entity #27979510  │ Entity #43691166  │ 1         
+│  │  └─ name       │ Cheese                                    │ str           │ Food          │ Entity #27472819  │ Entity #27979510  │ 0         
+│  ├─ 1             │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          │ Entity #62084209  │ Entity #43691166  │ 2         
+│  │  ├─ prep_time  │ 10                                        │ int           │ PreparedFood  │ Entity #04848920  │ Entity #62084209  │ 0         
+│  │  └─ name       │ Beans                                     │ str           │ Food          │ Entity #13535757  │ Entity #62084209  │ 0         
+│  └─ 2             │ PreparedFood(Toast, 5)                    │ PreparedFood  │ Meal          │ Entity #55272230  │ Entity #43691166  │ 2         
+│  │  ├─ prep_time  │ 5                                         │ int           │ PreparedFood  │ Entity #32701778  │ Entity #55272230  │ 0         
+│  │  └─ name       │ Toast                                     │ str           │ Food          │ Entity #67167938  │ Entity #55272230  │ 0             
 ```
 
 ### Debug output
@@ -209,17 +209,19 @@ crawl.print(whitespace=10)
 ────────────────────────────┬───────────────────────────────────────────────────┬───────────────────────┬───────────────────────
 assignment                  │ value                                             │ classname             │ source                
 ────────────────────────────┼───────────────────────────────────────────────────┼───────────────────────┼───────────────────────
-~                           │ <__main__.Meal object at 0x7f4c9448d720>          │ Meal                  │ None                  
+~                           │ <__main__.Meal object at 0x762f4d65de10>          │ Meal                  │ None                  
 ├─ name                     │ Cheesy Beans on Toast                             │ str                   │ Meal                  
 └─ ingredients              │ iterable: list                                    │ list                  │ Meal                  
-│  └─ 0                     │ Food(Cheese)                                      │ Food                  │ Meal                  
+│  ├─ 0                     │ Food(Cheese)                                      │ Food                  │ Meal                  
 │  │  └─ name               │ Cheese                                            │ str                   │ Food                  
-│  └─ 1                     │ PreparedFood(Beans, 10)                           │ PreparedFood          │ Meal                  
+│  ├─ 1                     │ PreparedFood(Beans, 10)                           │ PreparedFood          │ Meal                  
 │  │  ├─ prep_time          │ 10                                                │ int                   │ PreparedFood          
 │  │  └─ name               │ Beans                                             │ str                   │ Food                  
 │  └─ 2                     │ PreparedFood(Toast, 5)                            │ PreparedFood          │ Meal                  
 │  │  ├─ prep_time          │ 5                                                 │ int                   │ PreparedFood          
-│  │  └─ name               │ Toast                                             │ str                   │ Food
+│  │  └─ name               │ Toast                                             │ str                   │ Food                  
+
+
 ```
 
 ### branch_len
@@ -232,15 +234,17 @@ crawl.print(branch_len=4)
 ─────────────────────────────┬───────────────────────────────────────────┬───────────────┬───────────────
 assignment                   │ value                                     │ classname     │ source        
 ─────────────────────────────┼───────────────────────────────────────────┼───────────────┼───────────────
-~                            │ <__main__.Meal object at 0x7f4c9448d720>  │ Meal          │ None          
+~                            │ <__main__.Meal object at 0x762f4d65de10>  │ Meal          │ None          
 ├──── name                   │ Cheesy Beans on Toast                     │ str           │ Meal          
 └──── ingredients            │ iterable: list                            │ list          │ Meal          
-│     └──── 0                │ Food(Cheese)                              │ Food          │ Meal          
+│     ├──── 0                │ Food(Cheese)                              │ Food          │ Meal          
 │     │     └──── name       │ Cheese                                    │ str           │ Food          
-│     └──── 1                │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          
+│     ├──── 1                │ PreparedFood(Beans, 10)                   │ PreparedFood  │ Meal          
 │     │     ├──── prep_time  │ 10                                        │ int           │ PreparedFood  
 │     │     └──── name       │ Beans                                     │ str           │ Food          
 │     └──── 2                │ PreparedFood(Toast, 5)                    │ PreparedFood  │ Meal          
 │     │     ├──── prep_time  │ 5                                         │ int           │ PreparedFood  
-│     │     └──── name       │ Toast                                     │ str           │ Food
+│     │     └──── name       │ Toast                                     │ str           │ Food          
+
+
 ```
