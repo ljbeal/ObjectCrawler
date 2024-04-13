@@ -1,3 +1,6 @@
+"""
+Module holding base Entity class
+"""
 import logging
 from typing import Union
 
