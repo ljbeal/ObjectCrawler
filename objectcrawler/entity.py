@@ -14,7 +14,8 @@ class Entity:
         obj:
             actual object
         assignment:
-            explicitly set the assigned parameter for this object. Attempts to extract it using gc if not set
+            explicitly set the assigned parameter for this object.
+            Attempts to extract it using gc if not set
         source:
             class where this object is stored, not necessarily the parent
         parent:
