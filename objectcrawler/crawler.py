@@ -62,6 +62,8 @@ class Crawler:
             branch_len:
                 Sets length of "branch" horizontal lines
         """
+        # pylint: disable=too-many-locals, used-before-assignment
+        # pylint: disable=too-many-branches, too-many-statements
         logger.info("generating tree")
         if data is None:
             logger.debug("no data provided, generating tree")
@@ -199,6 +201,7 @@ class Crawler:
             initialise:
                 wipes the data tree for a fresh run if True
         """
+        # pylint: disable=too-many-arguments, too-many-branches
         logger.debug("crawling object %s", obj)
         obj_entity = Entity(obj, assignment=assignment, source=source, parent=parent)
         if initialise:
