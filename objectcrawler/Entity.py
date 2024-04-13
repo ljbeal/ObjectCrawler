@@ -33,7 +33,8 @@ class Entity:
         "iterable",
         ]
 
-    def __init__(self, obj,
+    def __init__(self,
+                 obj,
                  assignment: Union[None, str] = None,
                  source: str = "self",
                  parent: Union[None, "Entity"] = None):
