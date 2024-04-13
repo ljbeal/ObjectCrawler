@@ -12,16 +12,32 @@ class Simple:
         return f"Simple({self.name})"
 
 
+class NonString:
+    pass
+
+
 class TestEntity:
 
-    simple = Simple("test")
-    entity = Entity(obj=simple, assignment="entity", source="test")
+    objects = {
+        "simple": Simple("test"),
+        "nonstring": NonString()
+    }
+
+    entities = {k: Entity(v, assignment=k, source="test") for k, v in objects.items()}
 
     def test_assignment(self):
-        assert self.entity.assignment == "entity"
+        for k, e in self.entities.items():
+            assert e.assignment == k
 
     def test_source(self):
-        assert self.entity.source == "test"
+        for k, e in self.entities.items():
+            assert e.source == "test"
+
+    def test_classname(self):
+        assert self.entities["simple"].classname == "Simple"
 
     def test_explicit_value(self):
-        assert self.entity.value_is_explicit
+        assert self.entities["simple"].value_is_explicit
+
+    def test_non_explicit_value(self):
+        assert not self.entities["nonstring"].value_is_explicit
