@@ -1,6 +1,7 @@
 """
 Toplevel __init__ providing all tools and logger
 """
+
 import logging
 
 from objectcrawler.crawler import Crawler

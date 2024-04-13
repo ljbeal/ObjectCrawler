@@ -43,8 +43,8 @@ class Entity:
     ):
 
         logger.debug(
-            f"Creating Entity for object {obj} "
-            f"with assignment: {assignment}, source: {source}, parent: {parent}"
+            "Creating Entity for object %s with assignment: %s, source: %s, parent: %s", obj,
+            assignment, source, parent
         )
         self.assignment = str(assignment) or get_assignment(obj)
         self.source = str(source)
@@ -65,7 +65,7 @@ class Entity:
             logger.debug("\tobj is not a string, checking for iter")
             if hasattr(obj, "__iter__"):
                 self.iterable = len(obj)
-                logger.debug(f"\t\thas __iter__, True, len {self.iterable}")
+                logger.debug("\t\thas __iter__, True, len %s", self.iterable)
             else:
                 self.iterable = False
                 logger.debug("\t\tno __iter__, False")

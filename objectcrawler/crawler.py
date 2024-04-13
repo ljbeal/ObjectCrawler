@@ -82,17 +82,17 @@ class Crawler:
             if item is None:
                 cache.append([None] * len(widths))
                 continue
-            logger.debug("treating item %item".format(item))
-            logger.debug("parent is %parent".format(item.parent))
+            logger.debug("treating item %s", item)
+            logger.debug("parent is %s", item.parent)
             if item.parent not in indents:
                 indent = 0
-                logger.debug(f"\t\tparent {item.parent} not in indents, setting to 0")
+                logger.debug("\t\tparent %s not in indents, setting to 0", item.parent)
             else:
                 indent = indents[item.parent] + 1
-                logger.debug(f"\t\tfound parent {item.parent} at indent {indent - 1}")
+                logger.debug("\t\tfound parent %s at indent {indent - 1}", item.parent)
 
             indents[item] = indent
-            logging.debug(f"\tindent level set to {indent}")
+            logging.debug("\tindent level set to %s", indent)
 
             branch = "─" * branch_len + " "
             if indent == 0:
@@ -105,8 +105,10 @@ class Crawler:
                 except KeyError:
                     indents_used[item.parent] = 1
                 logger.debug(
-                    f"\titem {item} has used {indents_used[item.parent]} indents "
-                    f"of max {item.parent.nchildren}"
+                    "\titem %s has used %s indents of max %s",
+                    item,
+                    indents_used[item.parent],
+                    item.parent.nchildren
                 )
                 if indents_used[item.parent] >= item.parent.nchildren:
                     indentstr += "└" + branch
@@ -197,15 +199,15 @@ class Crawler:
             initialise:
                 wipes the data tree for a fresh run if True
         """
-        logger.debug(f"crawling object {obj}")
-        objEntity = Entity(obj, assignment=assignment, source=source, parent=parent)
+        logger.debug("crawling object %s", obj)
+        obj_entity = Entity(obj, assignment=assignment, source=source, parent=parent)
         if initialise:
-            self.data = [objEntity]
-        elif objEntity not in self.data:
-            self.data.append(objEntity)
+            self.data = [obj_entity]
+        elif obj_entity not in self.data:
+            self.data.append(obj_entity)
 
         for o in obj.__class__.__mro__:
-            logger.debug(f"parsing mro object {o}")
+            logger.debug("parsing mro object %s", o)
             source = o.__name__
             if source == "object":
                 continue
@@ -215,15 +217,15 @@ class Crawler:
             if hasattr(obj, "__dict__"):
                 for item in obj.__dict__:
                     if not item.startswith("__"):
-                        logger.debug(f"\tadding {item}")
+                        logger.debug("\tadding %", item)
                         members.append(item)
                     else:
-                        logger.debug(f"\tskipped {item}")
+                        logger.debug("\tskipped %s", item)
 
             if len(members) == 0:
                 continue
 
-            objEntity.nchildren += len(members)
+            obj_entity.nchildren += len(members)
 
             for idx, item in enumerate(members):
                 try:
@@ -235,7 +237,7 @@ class Crawler:
                     tmp,
                     assignment=item,
                     source=source,
-                    parent=objEntity,
+                    parent=obj_entity,
                     initialise=False,
                 )
                 # if we have an iterable, we should iterate over it and expand the objects
@@ -260,7 +262,7 @@ class Crawler:
                                 initialise=False,
                             )
         # return the object for further iteration if needed within recursion
-        return objEntity
+        return obj_entity
 
     @property
     def str(self) -> str:
