@@ -18,10 +18,7 @@ class NonString:
 
 class TestEntity:
 
-    objects = {
-        "simple": Simple("test"),
-        "nonstring": NonString()
-    }
+    objects = {"simple": Simple("test"), "nonstring": NonString()}
 
     entities = {k: Entity(v, assignment=k, source="test") for k, v in objects.items()}
 

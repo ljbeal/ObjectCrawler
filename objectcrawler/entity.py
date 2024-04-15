@@ -1,6 +1,7 @@
 """
 Module holding base Entity class
 """
+
 import logging
 from typing import Union
 
@@ -49,8 +50,11 @@ class Entity:
     ):
 
         logger.debug(
-            "Creating Entity for object %s with assignment: %s, source: %s, parent: %s", obj,
-            assignment, source, parent
+            "Creating Entity for object %s with assignment: %s, source: %s, parent: %s",
+            obj,
+            assignment,
+            source,
+            parent,
         )
         self.assignment = str(assignment) or get_assignment(obj)
         self.source = str(source)

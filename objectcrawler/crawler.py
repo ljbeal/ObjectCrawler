@@ -87,7 +87,9 @@ class Crawler:
             logger.debug("treating item %s", item)
             logger.debug("parent is %s", item.parent)
             # search for this item's parent in the indents
-            if item.parent not in indents:  # if the parent does not exist, we are not indented
+            if (
+                item.parent not in indents
+            ):  # if the parent does not exist, we are not indented
                 indent = 0
                 logger.debug("\t\tparent %s not in indents, setting to 0", item.parent)
             else:  # parent found, take its indent and add one
@@ -114,7 +116,7 @@ class Crawler:
                     "\titem %s has used %s indents of max %s",
                     item,
                     indents_used[item.parent],
-                    item.parent.nchildren
+                    item.parent.nchildren,
                 )
                 if indents_used[item.parent] >= item.parent.nchildren:
                     # if we're at the end of the tree, add a terminating branch
