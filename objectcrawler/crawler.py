@@ -65,43 +65,47 @@ class Crawler:
         # pylint: disable=too-many-locals, used-before-assignment
         # pylint: disable=too-many-branches, too-many-statements
         logger.info("generating tree")
+        # data can be not None for a diff
         if data is None:
             logger.debug("no data provided, generating tree")
             self._crawl(self.obj, initialise=True)
-
             data = self.data
 
         # calculate column widths, pre-fill with title lengths
         widths = {"assignment": 10, "value": 5, "classname": 9, "source": 6}
-        if debug:
+        if debug:  # add extra columns for debug output
             widths.update({"entity": 6, "parent": 6, "nchildren": 8})
 
         # cache a list of lines, for later treating dependent on col widths
         cache = []
         indents = {}
         indents_used = {}
-        for item in data:
-            if item is None:
+        for item in data:  # iterate over rows
+            if item is None:  # insert None into `data` to add a break in the table
                 cache.append([None] * len(widths))
                 continue
             logger.debug("treating item %s", item)
             logger.debug("parent is %s", item.parent)
-            if item.parent not in indents:
+            # search for this item's parent in the indents
+            if item.parent not in indents:  # if the parent does not exist, we are not indented
                 indent = 0
                 logger.debug("\t\tparent %s not in indents, setting to 0", item.parent)
-            else:
+            else:  # parent found, take its indent and add one
                 indent = indents[item.parent] + 1
                 logger.debug("\t\tfound parent %s at indent {indent - 1}", item.parent)
-
+            # add this item to the indents, at the correct level
             indents[item] = indent
             logging.debug("\tindent level set to %s", indent)
-
+            # generate "branch string" from the configured branch length
             branch = "─" * branch_len + " "
-            if indent == 0:
+            if indent == 0:  # not indented at all, don't bother with the tree
                 indentstr = ""
             else:
                 # generate basic indent string, taking branch length into account
+                # ensures that whitespace matches the horizontal lines
                 indentstr = ("│" + " " * (branch_len + 1)) * (indent - 1)
+                # we need to know when we hit the end of the list of children
+                # mark off this item as "used"
                 try:
                     indents_used[item.parent] += 1
                 except KeyError:
@@ -113,10 +117,11 @@ class Crawler:
                     item.parent.nchildren
                 )
                 if indents_used[item.parent] >= item.parent.nchildren:
+                    # if we're at the end of the tree, add a terminating branch
                     indentstr += "└" + branch
                 else:
                     indentstr += "├" + branch
-
+            # generate the table proper
             line = []
             for k in widths:  # pylint: disable=consider-using-dict-items
                 if k == "value" and item.iterable and item.iterable > 0:
@@ -159,7 +164,7 @@ class Crawler:
             for idx, item in enumerate(line):
                 width = list(widths.values())[idx]
                 ljust = width + whitespace
-
+                # allows spacers to be inserted by adding None into the data list
                 if item is None:
                     tmp.append("─" * ljust)
                     spacer = True
