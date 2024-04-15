@@ -18,6 +18,9 @@ classifiers = [
 dynamic = ["version"]
 keywords = ["debug", "inspect", "inspection"]
 
+[project.optional-dependencies]
+dev = ["pylint", "flake8", "black"]
+
 [project.urls]
 Homepage = "https://github.com/ljbeal/ObjectCrawler"
 Documentation = "https://github.com/ljbeal/ObjectCrawler"
