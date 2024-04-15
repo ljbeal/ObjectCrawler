@@ -36,3 +36,6 @@ version = {attr = 'objectcrawler.__version__'}
 addopts = [
     "--import-mode=importlib",
 ]
+
+[tool.pylint.MASTER]
+ignore-paths = '^tests/.*$'
