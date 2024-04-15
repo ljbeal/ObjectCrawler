@@ -64,12 +64,14 @@ class Crawler:
         """
         # pylint: disable=too-many-locals, used-before-assignment
         # pylint: disable=too-many-branches, too-many-statements
-        logger.info("generating tree")
         # data can be not None for a diff
         if data is None:
-            logger.debug("no data provided, generating tree")
+            logger.debug("tree generation, but no data provided: crawling")
             self._crawl(self.obj, initialise=True)
             data = self.data
+        logger.info("#######################")
+        logger.info("### generating tree ###")
+        logger.info("#######################")
 
         # calculate column widths, pre-fill with title lengths
         widths = {"assignment": 10, "value": 5, "classname": 9, "source": 6}
@@ -181,6 +183,10 @@ class Crawler:
                 output.append("│ ".join(tmp))
             else:
                 output.append("┼─".join(tmp))
+
+        logger.info("###########################")
+        logger.info("### generation complete ###")
+        logger.info("###########################")
 
         return "\n".join(output)
 
