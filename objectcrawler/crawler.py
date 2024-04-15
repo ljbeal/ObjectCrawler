@@ -96,7 +96,9 @@ class Crawler:
                 logger.debug("\t\tparent %s not in indents, setting to 0", item.parent)
             else:  # parent found, take its indent and add one
                 indent = indents[item.parent] + 1
-                logger.debug("\t\tfound parent %s at indent {indent - 1}", item.parent)
+                logger.debug(
+                    "\t\tfound parent %s at indent %s", item.parent, indent - 1
+                )
             # add this item to the indents, at the correct level
             indents[item] = indent
             logging.debug("\tindent level set to %s", indent)
