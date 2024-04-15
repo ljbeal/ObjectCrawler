@@ -107,9 +107,6 @@ class Crawler:
             if indent == 0:  # not indented at all, don't bother with the tree
                 indentstr = ""
             else:
-                # generate basic indent string, taking branch length into account
-                # ensures that whitespace matches the horizontal lines
-                indentstr = ("│" + " " * (branch_len + 1)) * (indent - 1)
                 # we need to know when we hit the end of the list of children
                 # mark off this item as "used"
                 try:
@@ -122,6 +119,9 @@ class Crawler:
                     indents_used[item.parent],
                     item.parent.nchildren,
                 )
+                # generate basic indent string, taking branch length into account
+                # ensures that whitespace matches the horizontal lines
+                indentstr = ("│" + " " * (branch_len + 1)) * (indent - 1)
                 if indents_used[item.parent] >= item.parent.nchildren:
                     # if we're at the end of the tree, add a terminating branch
                     indentstr += "└" + branch
