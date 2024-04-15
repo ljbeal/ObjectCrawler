@@ -6,6 +6,12 @@ Originally built for objects defining `__slots__`, however it also handles the `
 
 ## Installation
 
+### pip
+
+1) `pip install objectcrawler`
+
+### manual
+
 1) Create a fork of this repo
 2) Clone the forked repo to your machine
 3) Install with `pip install ObjectCrawler`
